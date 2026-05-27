@@ -1,0 +1,44 @@
+#!/bin/sh
+
+# S98lddmodules
+# Init script to load/unload scull, faulty, and hello modules
+
+case "$1" in
+    start)
+        echo "Starting LDD modules..."
+        
+        # Change to the kernel modules directory where .ko files are installed
+        # scull_load and module_load use "insmod ./$module.ko" (relative path)
+        cd /lib/modules/$(uname -r)/extra/
+        echo "Current directory: $(pwd)"
+        # 1. Load the scull driver using the customized helper script
+        scull_load
+        
+        # 2. Load the faulty driver using the customized helper script
+        module_load faulty
+        
+        # 3. Load the hello module using modprobe
+        modprobe hello
+        ;;
+        
+    stop)
+        echo "Stopping LDD modules..."
+        
+        # 1. Unload the scull driver
+        scull_unload
+        
+        # 2. Unload the faulty driver
+        module_unload faulty
+        
+        # 3. Unload the hello module using rmmod
+        rmmod hello
+        ;;
+        
+    *)
+        # Provide usage instructions if script is run with invalid arguments
+        echo "Usage: $0 {start|stop}"
+        exit 1
+        ;;
+esac
+
+exit 0
