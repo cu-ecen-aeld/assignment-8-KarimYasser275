@@ -19,6 +19,8 @@ case "$1" in
         
         # 3. Load the hello module using modprobe
         modprobe hello
+
+        aesdchar_load
         ;;
         
     stop)
@@ -32,6 +34,8 @@ case "$1" in
         
         # 3. Unload the hello module using rmmod
         rmmod hello
+
+        aesdchar_unload
         ;;
         
     *)
